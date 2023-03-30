@@ -10,14 +10,16 @@ const inter = Inter({ subsets: ['latin'] })
 export default function Home() {
 
   const [code, setCode] = useState("");
+  const [output, setOutput] = useState("")
 
   const handleSubmit = async()=>{
     const payload = {
       language: "cpp",
       code
     };
-    const output = await axios.post("http://localhost:5000/run", payload);
-    console.log(output);
+    const {data} = await axios.post("http://localhost:5000/run", payload);
+    setOutput(data.output);
+    console.log(data);
   }
   return (
     <>
@@ -31,6 +33,8 @@ export default function Home() {
         <h1 className="text-3xl font-bold underline">Write your code here mr. Om Prakash</h1>
         <textarea name="codeBox" value={code} onChange={(e)=>setCode(e.target.value)} cols="60" rows="10" className='border-4'></textarea>
         <button className='border-2 bg-blue-300 p-4 rounded-lg' onClick={handleSubmit}>Submit</button>
+        <h1>Output- </h1>
+        <p className='text-green-700'>{output}</p>
       </main>
     </>
   );
