@@ -1,5 +1,6 @@
 const express = require ("express");
 const {generateFile} = require("./generateFile")
+const {executeCpp} = require("./executeCpp")
 const app = express();
 
 app.use(express.urlencoded({ extended:true }));
@@ -17,8 +18,9 @@ app.post("/run", async (req, res)=>{
     // we need to generate a cpp file with content from request
     const filepath = await generateFile(language, code)
     // we need to run the file and then send the response
+    const output = await executeCpp(filepath);
 
-    return res.json({ filepath });
+    return res.json({ filepath, output });
 })
 
 
