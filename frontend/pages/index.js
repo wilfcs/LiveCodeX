@@ -22,8 +22,15 @@ export default function Home() {
     try {
       const { data } = await axios.post("http://localhost:5000/run", payload);
       setOutput(data.output);
-    } catch (error) {
-      console.log(error.response)
+    } catch ({response}) {
+      if(response){
+        const errorMessage = response.data.error.stderr;
+        setOutput(errorMessage);
+      }
+      else{
+        setOutput("Error connecting to server");
+      }
+      // console.log(response)
     }
   }
   return (

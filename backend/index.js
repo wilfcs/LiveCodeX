@@ -1,8 +1,27 @@
 const express = require("express");
 const cors = require("cors");
+const mongoose = require("mongoose");
+
 const { generateFile } = require("./generateFile");
 const { executeCpp } = require("./executeCpp");
 const { executePy } = require("./executePy");
+
+// mongoose.connect("mongodb://localhost/compilerapp", {
+//   useNewUrlParser: true,
+//   useUnifiedTopology: true
+// }, (err) => {
+//   if(err){
+//     console.log(err);
+//     process.exit(1);
+//   }
+//   else{
+//     console.log("Sucessfully connected to mongoDb database")
+//   }
+// })
+
+mongoose
+  .connect("mongodb://localhost/compilerapp")
+  .then(() => console.log("Connected to mongoDB!"));
 
 const app = express();
 
@@ -16,7 +35,7 @@ app.get("/", (req, res) => {
 
 app.post("/run", async (req, res) => {
   const { language = "cpp", code } = req.body;
-  console.log(language, code.length)
+  // console.log(language, code.length)
   if (code === undefined)
     res
       .status(400)
