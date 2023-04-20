@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import { useState, useEffect } from 'react';
 import axios from "axios"
 import stubs from './components/defaultStubs';
+import moment from 'moment';
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -14,6 +15,7 @@ export default function Home() {
   const [output, setOutput] = useState("")
   const [jobId, setJobId] = useState("")
   const [status, setStatus] = useState("")
+  const [jobDetails, setJobDetails] = useState(null)
 
   useEffect(() => {
     setCode(stubs[language]);
@@ -32,6 +34,27 @@ export default function Home() {
     }
   }
 
+  const renderJobDetails = ()=>{
+    if(!jobDetails)
+      return ("");
+    
+    let result = '';
+    let{submittedAt, completedAt, startedAt} = jobDetails;
+    submittedAt = moment(submittedAt).toString();
+    // result += `Submitted at: ${submittedAt}`;
+
+    if(!completedAt || !startedAt)
+      return result;
+    
+    const start = moment(startedAt)
+    const end = moment(completedAt)
+
+    const executionTime = end.diff(start, 'seconds', true);
+
+    result += `  Execution time: ${executionTime}s`;
+
+    return result;
+  }
   const handleSubmit = async()=>{
     const payload = {
       language,
@@ -41,6 +64,7 @@ export default function Home() {
       setJobId("");
       setStatus("");
       setOutput("");
+      setJobDetails(null);
 
       const { data } = await axios.post("http://localhost:5000/run", payload);
       console.log(data)
@@ -64,7 +88,8 @@ export default function Home() {
           }
 
           setStatus(jobStatus);
-           
+          setJobDetails(job);
+          renderJobDetails();
           if (jobStatus === "Pending") return;
           setOutput(jobOutput);
           clearInterval(intervalId);
@@ -136,8 +161,8 @@ export default function Home() {
           Submit
         </button>
         <p>{status}</p>
+        <p>{renderJobDetails()}</p>
         {output ?  <p className="text-green-700">Output-{output}</p> : <></>}
-   
       </main>
     </>
   );
