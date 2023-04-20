@@ -1,9 +1,16 @@
-import React from 'react'
+const stubs = {};
 
-const defaultStubs = () => {
-  return (
-    <div>defaultStubs</div>
-  )
-}
+stubs.cpp = `#include <bits/stdc++.h>
 
-export default defaultStubs
+using namespace std;
+
+int main() {
+    // Write your code here
+    return 0;
+}`;
+
+stubs.py = `# Write your code here
+`
+
+
+export default stubs;

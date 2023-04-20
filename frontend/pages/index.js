@@ -1,8 +1,8 @@
 import Head from 'next/head'
 import { Inter } from 'next/font/google'
-import styles from '@/styles/Home.module.css'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import axios from "axios"
+import stubs from './components/defaultStubs';
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -15,6 +15,22 @@ export default function Home() {
   const [jobId, setJobId] = useState("")
   const [status, setStatus] = useState("")
 
+  useEffect(() => {
+    setCode(stubs[language]);
+  }, [language])
+
+  useEffect(()=>{
+    const defaultLang = localStorage.getItem("default-language") || "cpp";
+    setLanguage(defaultLang);
+  }, [])
+  
+
+  const setDefaultLanguage = ()=>{
+    let response = window.confirm(`Do you want to set this as your default language?`)
+    if(response){
+      localStorage.setItem("default-language", language);
+    }
+  }
 
   const handleSubmit = async()=>{
     const payload = {
@@ -85,18 +101,25 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <main className="flex flex-col justify-center items-center">
-        <h1 className="text-3xl font-bold underline">Write your code here</h1>
+        <h1 className="text-3xl font-bold underline">LiveCodeX</h1>
         <div>
           <label>Language:</label>
           <select
             value={language}
             onChange={(e) => {
-              setLanguage(e.target.value);
+              let response = window.confirm(
+                "WARNING: Switching the language will remove your current code. Do you want to proceed?"
+              )
+              if(response)
+                setLanguage(e.target.value);
             }}
           >
             <option value="cpp">C++</option>
             <option value="py">Python</option>
           </select>
+        </div>
+        <div>
+          <button onClick={setDefaultLanguage}>Set Default</button>
         </div>
         <textarea
           name="codeBox"
