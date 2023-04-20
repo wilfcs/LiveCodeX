@@ -21,7 +21,8 @@ export default function Home() {
     };
     try {
       const { data } = await axios.post("http://localhost:5000/run", payload);
-      setOutput(data.output);
+      console.log(data)
+      setOutput(data.jobId);
     } catch ({response}) {
       if(response){
         const errorMessage = response.data.error.stderr;

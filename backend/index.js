@@ -5,6 +5,8 @@ const mongoose = require("mongoose");
 const { generateFile } = require("./generateFile");
 const { executeCpp } = require("./executeCpp");
 const { executePy } = require("./executePy");
+const Job = require("./models/Job");
+const { json } = require("express");
 
 // mongoose.connect("mongodb://localhost/compilerapp", {
 //   useNewUrlParser: true,
@@ -29,9 +31,23 @@ app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(cors());
 
-app.get("/", (req, res) => {
-  return res.json({ hello: "world!" });
-});
+app.get("/status", async (req, res) => {
+  const jobId = req.query.id;
+  console.log("Status requested", jobId);
+  if(jobId === undefined)
+    return res.status(400).json({success: false, error: "Missing id query param"});
+
+  try {
+    const job = await Job.findById(jobId);
+
+    if(job === undefined)
+      return res.status(400).json({success: false, error: "Invalid job id"});
+
+    return res.status(200).json({success: true, job});
+  } catch (error) {
+    return res.status(400).json({success: false, error: JSON.stringify(error)})
+  }
+})
 
 app.post("/run", async (req, res) => {
   const { language = "cpp", code } = req.body;
@@ -41,21 +57,41 @@ app.post("/run", async (req, res) => {
       .status(400)
       .json({ success: false, error: "The code body cannot be empty" }); // bad request if there is no code
 
+      let job;
   try {
     // we need to generate a cpp file with content from request
     const filepath = await generateFile(language, code);
     // we need to run the file and then send the response
 
+     job = await new Job({ language, filepath });
+    const jobId = job["_id"];
+    console.log(job);
+    res.status(201).json({success: true,jobId});
+    
+    
     let output;
+
+    job["startedAt"] = new Date();
     if (language === "cpp") {
       output = await executeCpp(filepath);
     } else {
       output = await executePy(filepath);
     }
 
-    return res.json({ filepath, output });
+    job["completedAt"] = new Date();
+    job["status"] = "Success";
+    job["output"] = output;
+
+    await job.save();
+    console.log(job)
+    // return res.json({ filepath, output });
   } catch (error) {
-    res.status(500).json({ error });
+    job["completedAt"] = new Date();
+    job["status"] = "Error";
+    job["output"] = JSON.stringify(error);
+    await job.save();
+    console.log(job);
+    // res.status(500).json({ error });
   }
 });
 

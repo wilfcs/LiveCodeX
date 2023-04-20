@@ -26,7 +26,11 @@ const JobSchema = mongoose.Schema({
     status:{
         type: String,
         default: "Pending",
-        enum: ["Pending", "Sucess", "Error"]
+        enum: ["Pending", "Success", "Error"]
     }
 
 })
+
+const Job = new mongoose.model('job', JobSchema);
+
+module.exports = Job;
