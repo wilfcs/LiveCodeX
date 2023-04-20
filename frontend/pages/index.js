@@ -12,6 +12,8 @@ export default function Home() {
   const [code, setCode] = useState("");
   const [language, setLanguage] = useState("cpp")
   const [output, setOutput] = useState("")
+  const [jobId, setJobId] = useState("")
+  const [status, setStatus] = useState("")
 
 
   const handleSubmit = async()=>{
@@ -20,9 +22,46 @@ export default function Home() {
       code
     };
     try {
+      setJobId("");
+      setStatus("");
+      setOutput("");
+
       const { data } = await axios.post("http://localhost:5000/run", payload);
       console.log(data)
-      setOutput(data.jobId);
+      setJobId(data.jobId);
+
+      let intervalId;
+
+      intervalId = setInterval(async ()=>{
+        const { data: dataRes } = await axios.get("http://localhost:5000/status", { params: {id: data.jobId}});
+        console.log(dataRes)
+
+        const { success, job, error } = dataRes;
+        console.log(dataRes);
+
+        if (success) {
+          let jobStatus = "Pending", jobOutput;
+          if (job){
+            // { status: jobStatus, output: jobOutput } = job;
+            jobStatus = job.status;
+            jobOutput = job.output;
+          }
+
+          setStatus(jobStatus);
+           
+          if (jobStatus === "Pending") return;
+          setOutput(jobOutput);
+          clearInterval(intervalId);
+        } else {
+          console.error(error);
+          setStatus("Error: Please try again!")
+          clearInterval(intervalId);
+          setOutput(error);
+        }
+      }, 500);
+
+      
+
     } catch ({response}) {
       if(response){
         const errorMessage = response.data.error.stderr;
@@ -73,8 +112,9 @@ export default function Home() {
         >
           Submit
         </button>
-        <h1>Output- </h1>
-        <p className="text-green-700">{output}</p>
+        <p>{status}</p>
+        {output ?  <p className="text-green-700">Output-{output}</p> : <></>}
+   
       </main>
     </>
   );
