@@ -15,7 +15,7 @@ body{
 }
 
 .formWrapper {
-    background: #282a36;
+    background: #2c2f42;
     padding: 20px;
     border-radius: 10px;
     width: 400px;
@@ -25,10 +25,11 @@ body{
 footer {
     position: fixed;
     bottom: 0;
+    /* margin-bottom: 10px; */
 }
 
 footer a {
-    color: #4aee88;
+    color: #4AED88;
 }
 
 .inputGroup {
@@ -37,7 +38,7 @@ footer a {
 }
 
 .mainLabel {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     margin-top: 0;
 }
 
@@ -69,9 +70,10 @@ footer a {
 
 .joinBtn,
 .leaveBtn {
-    background: #4aed88;
+    background: #4AED88;
     width: 100px;
     margin-left: auto;
+    color: black;
 }
 
 .joinBtn:hover,
@@ -82,12 +84,13 @@ footer a {
 .createInfo {
     margin: 0 auto;
     margin-top: 20px;
+    margin-bottom: 10px;
 }
 
 .createNewBtn {
-    color: #4aed88;
+    color: #4AED88;
     text-decoration: none;
-    border-bottom: 1px solid #4aed88;
+    border-bottom: 1px solid #4AED88;
     transition: all 0.3s ease-in-out;
 }
 
@@ -100,6 +103,7 @@ footer a:hover {
 .mainWrap {
     display: grid;
     grid-template-columns: 230px 1fr;
+    height: 100vh;
 }
 
 .aside {
@@ -146,9 +150,25 @@ footer a:hover {
     margin-top: 20px;
 }
 
+.copyBtn{
+    background-color: rgb(214, 226, 254);
+    color: rgb(23, 23, 23);
+}
+
+.copyBtn:hover{
+    background-color: rgb(197, 216, 253);
+}
+
 .CodeMirror {
     min-height: calc(100vh - 20px);
     font-size: 20px;
     line-height: 1.6;
     padding-top: 20px;
+}
+
+.logoColor{
+    color: #4AED88;
+}
+.logoColor2{
+    color: #baffd4;
 }

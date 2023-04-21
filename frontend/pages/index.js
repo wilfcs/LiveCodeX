@@ -5,6 +5,7 @@ import {v4 as uuidv4} from "uuid";
 import React, { useState } from "react";
 import toast, { Toaster } from "react-hot-toast";
 import { useRouter } from "next/router";
+import Router, { withRouter } from "next/router";
 
 
 const inter = Inter({ subsets: ['latin'] })
@@ -30,8 +31,8 @@ export default function Home() {
     }
     router.push({
       pathname: `/editor/${roomId}`,
-      state: { username },
-    });
+      query: { name: username },
+    }, `editor/${roomId}`);
   }
 
   const handleInputEnter = (e)=>{
@@ -82,8 +83,14 @@ export default function Home() {
           </div>
           <div className="homePageWrapper">
             <div className="formWrapper">
-              <Logo />
-              <h4 className="mainLabel">Paste invitation ROOM ID</h4>
+              <div className=''>
+                <Logo />
+              </div>
+
+              <h4 className="mainLabel text-slate-400">
+                Join a room & share code in real-time🔥
+              </h4>
+
               <div className="inputGroup">
                 <input
                   type="text"
@@ -101,7 +108,9 @@ export default function Home() {
                   value={username}
                   onKeyUp={handleInputEnter}
                 />
-                <button className="btn joinBtn" onClick={joinRoom}>Join</button>
+                <button className="btn joinBtn" onClick={joinRoom}>
+                  Join
+                </button>
                 <span className="createInfo">
                   If you don't have an invite then create &nbsp;
                   <a href="" className="createNewBtn" onClick={createNewRoom}>

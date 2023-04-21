@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import companyLogo from "../../public/LiveCodeX logo red.json";
 import Lottie from "lottie-react";
 import { Roboto, Sen } from "next/font/google";
@@ -12,18 +12,18 @@ const sen = Sen({
   subsets: ["latin"],
 });
 
-const Logo = () => {
+const Logo2 = () => {
   return (
     <div className="flex items-center">
-      <div className="w-20">
+      <div className="w-10">
         <Lottie
           loop={true}
           animationData={companyLogo}
-          height={100}
-          width={100}
+          height={10}
+          width={10}
         />
       </div>
-      <div className="font-bold text-4xl logoColor">
+      <div className="font-bold text-2xl logoColor">
         LiveCode
         <span className={sen.className}>
           <span className="logoColor2">X</span>
@@ -31,6 +31,6 @@ const Logo = () => {
       </div>
     </div>
   );
-}
+};
 
-export default Logo
+export default Logo2;
