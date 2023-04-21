@@ -1,14 +1,43 @@
 import Head from 'next/head'
 import { Inter } from 'next/font/google'
-import Logo from "../public/LiveCodeX logo red.json";
-import Lottie from "lottie-react";
-
+import Logo from "./components/Logo"
+import {v4 as uuidv4} from "uuid";
+import React, { useState } from "react";
+import toast, { Toaster } from "react-hot-toast";
+import { useRouter } from "next/router";
 
 
 const inter = Inter({ subsets: ['latin'] })
 
 export default function Home() {
 
+  const router = useRouter();
+
+  const [roomId, setRoomId] = useState("");
+  const [username, setUsername] = useState("");
+
+  const createNewRoom = (e) => {
+    e.preventDefault();
+    const id = uuidv4();
+    setRoomId(id);
+    toast.success("Created a new room");
+  };
+
+  const joinRoom = ()=>{
+    if(!roomId || !username){
+      toast.error("Please enter Room ID and Username")
+      return;
+    }
+    router.push({
+      pathname: `/editor/${roomId}`,
+      state: { username },
+    });
+  }
+
+  const handleInputEnter = (e)=>{
+    if(e.code === "Enter")
+      joinRoom();
+  }
   
   return (
     <>
@@ -40,11 +69,60 @@ export default function Home() {
       </Head>
       <main>
         <>
-          <h1>Home page</h1>
-          <div className='w-10'>
-          <Lottie loop={true} animationData={Logo} height={100} width={100} />
+          <div>
+            <Toaster
+              toastOptions={{
+                success: {
+                  theme: {
+                    primary: "",
+                  },
+                },
+              }}
+            ></Toaster>
           </div>
-          <h1>working</h1>
+          <div className="homePageWrapper">
+            <div className="formWrapper">
+              <Logo />
+              <h4 className="mainLabel">Paste invitation ROOM ID</h4>
+              <div className="inputGroup">
+                <input
+                  type="text"
+                  className="inputBox"
+                  placeholder="ROOM ID"
+                  onChange={(e) => setRoomId(e.target.value)}
+                  value={roomId}
+                  onKeyUp={handleInputEnter}
+                />
+                <input
+                  type="text"
+                  className="inputBox"
+                  placeholder="USERNAME"
+                  onChange={(e) => setUsername(e.target.value)}
+                  value={username}
+                  onKeyUp={handleInputEnter}
+                />
+                <button className="btn joinBtn" onClick={joinRoom}>Join</button>
+                <span className="createInfo">
+                  If you don't have an invite then create &nbsp;
+                  <a href="" className="createNewBtn" onClick={createNewRoom}>
+                    new room
+                  </a>
+                </span>
+              </div>
+            </div>
+            <footer>
+              <h4>
+                Contact the &nbsp;
+                <a
+                  href="https://portfolio-website-xi-two.vercel.app/"
+                  target="_blank"
+                  className="underline"
+                >
+                  Dev :)
+                </a>
+              </h4>
+            </footer>
+          </div>
         </>
       </main>
     </>
