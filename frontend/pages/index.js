@@ -44,7 +44,7 @@ export default function Home() {
           <div className='w-10'>
           <Lottie loop={true} animationData={Logo} height={100} width={100} />
           </div>
-          <h1>workign</h1>
+          <h1>working</h1>
         </>
       </main>
     </>
