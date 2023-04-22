@@ -1,19 +1,20 @@
 import { useRouter } from "next/router";
 import React from "react";
 import Head from "next/head";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import stubs from "../components/defaultStubs";
 import moment from "moment";
 import Client from "../components/Client";
-import Logo from "../components/Logo";
 import Logo2 from "../components/Logo2";
-import { FaBeer } from "react-icons/fa";
 import {IoMdCheckmarkCircle} from "react-icons/io"
+import Editor from "@monaco-editor/react"
+
 
 const roomId = () => {
   const router = useRouter();
   const idOfRoom = router.query.roomId;
+  const editorRef = useRef(null);
 
   // This section is for the logic of the execution of the files.
 
@@ -24,6 +25,9 @@ const roomId = () => {
   const [status, setStatus] = useState("");
   const [jobDetails, setJobDetails] = useState(null);
   const [username, setUsername] = useState("")
+  const [theme, setTheme] = useState("vs-dark")
+  const [sizeOfFont, setSizeOfFont] = useState(20);
+  const [familyOfFont, setFamilyOfFont] = useState("default");
 
   useEffect(() => {
     setCode(stubs[language]);
@@ -57,6 +61,13 @@ useEffect(() => {
     );
     if (response) setCode(stubs[language]);
   };
+
+  const handleEditorDidMount = (editor, monaco) =>{
+    editorRef.current = editor;
+  }
+  const setEditorValue = ()=>{
+    setCode(editorRef.current.getValue());
+    }
 
   const renderJobDetails = () => {
     if (!jobDetails) return "";
@@ -154,6 +165,8 @@ useEffect(() => {
 
   }
 
+
+
   return (
     <>
       <div className="mainWrap">
@@ -217,7 +230,7 @@ useEffect(() => {
               <Logo2 />
             </div>
             <h3 className="logoColor2 flex items-center flex-wrap text-sm mt-6 mb-2">
-              Connection Successful <IoMdCheckmarkCircle className="m-2"/>
+              Connection Successful <IoMdCheckmarkCircle className="m-2" />
             </h3>
             <div className="clientsList">
               {clients.map((client) => (
@@ -232,7 +245,110 @@ useEffect(() => {
             Leave
           </button>
         </div>
-        <div className="editorWrap bg-slate-300">Editor goes here...</div>
+
+        <div className="editorWrap">
+          <div className="editorTopbar">
+            <div className="language-change">
+              <label className="mx-1">Language: </label>
+              <select
+                value={language}
+                onChange={(e) => {
+                  let response = window.confirm(
+                    "WARNING: Switching the language will remove your current code. Do you want to proceed?"
+                  );
+                  if (response) setLanguage(e.target.value);
+                }}
+              >
+                <option value="cpp">C++</option>
+                <option value="py">Python</option>
+              </select>
+            </div>
+            <div className="theme-change">
+              <label className="mx-1">Theme: </label>
+              <select
+                value={theme}
+                onChange={(e) => {
+                  setTheme(e.target.value);
+                }}
+              >
+                <option value="vs-dark">vs-dark</option>
+                <option value="vs-light">vs-light</option>
+              </select>
+            </div>
+            <div className="font-family">
+              <label className="mx-1">Font-Family: </label>
+              <select
+                value={familyOfFont}
+                onChange={(e) => {
+                  setFamilyOfFont(e.target.value);
+                }}
+              >
+                <option value="default">Default</option>
+                <option value="Courier New">Courier New</option>
+              </select>
+            </div>
+            <div className="font-size">
+              <label className="mx-1">Font-Size: </label>
+              <select
+                value={sizeOfFont}
+                onChange={(e) => {
+                  setSizeOfFont(e.target.value);
+                }}
+              >
+                <option value="15">10px</option>
+                <option value="16">11px</option>
+                <option value="17">12px</option>
+                <option value="18">13px</option>
+                <option value="19">14px</option>
+                <option value="20">15px</option>
+                <option value="21">16px</option>
+                <option value="22">17px</option>
+                <option value="23">18px</option>
+                <option value="24">19px</option>
+                <option value="25">20px</option>
+                <option value="26">21px</option>
+                <option value="27">22px</option>
+                <option value="28">23px</option>
+                <option value="29">24px</option>
+                <option value="30">25px</option>
+              </select>
+            </div>
+            <div>
+              <button onClick={setDefaultLanguage}>Set Default</button>
+            </div>
+            <div>
+              <button onClick={resetCode}>Reset logo</button>
+            </div>
+          </div>
+
+          <div className="editorContent">
+            <Editor
+              name="codeBox"
+              value={code}
+              onMount={handleEditorDidMount}
+              onChange={setEditorValue}
+              height="88vh"
+              width="100%"
+              theme={theme}
+              defaultLanguage="cpp"
+              options={{ fontSize: sizeOfFont, fontFamily: familyOfFont }}
+            />
+          </div>
+          <div className="editorBottombar">
+            <div>
+          {" "}
+          <button
+            className="border-2 bg-blue-300 p-4 rounded-lg"
+            onClick={handleSubmit}
+          >
+            Run Code
+          </button>
+          <p>{status}</p>
+          <p>{renderJobDetails()}</p>
+          {output ? <p className="text-green-700">Output-{output}</p> : <></>}
+        </div>
+          </div>
+        </div>
       </div>
     </>
   );

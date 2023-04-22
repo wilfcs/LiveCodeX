@@ -120,7 +120,7 @@ export default function Home() {
               </div>
             </div>
             <footer>
-              <h4>
+              <h4 className='text-slate-400'>
                 Contact the &nbsp;
                 <a
                   href="https://portfolio-website-xi-two.vercel.app/"
