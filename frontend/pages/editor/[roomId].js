@@ -34,8 +34,9 @@ const roomId = () => {
   const [username, setUsername] = useState("")
   const [theme, setTheme] = useState("vs-dark")
   const [sizeOfFont, setSizeOfFont] = useState(20);
-  const [familyOfFont, setFamilyOfFont] = useState("default");
+  const [familyOfFont, setFamilyOfFont] = useState("Consolas");
   const [isOpen, setIsOpen] = useState(false);
+  const [isConsoleOpen, setIsConsoleOpen] = useState(false)
 
   useEffect(() => {
     setCode(stubs[language]);
@@ -45,7 +46,7 @@ const roomId = () => {
     const defaultLang = localStorage.getItem("default-language") || "cpp";
     const defaultTheme = localStorage.getItem("default-theme") || "vs-dark";
     const defaultSize = localStorage.getItem("default-size") || 20;
-    const defaultFont = localStorage.getItem("default-font") || "default";
+    const defaultFont = localStorage.getItem("default-font") || "Consolas";
     setLanguage(defaultLang);
     setTheme(defaultTheme);
     setSizeOfFont(defaultSize);
@@ -104,6 +105,7 @@ useEffect(() => {
     return result;
   };
   const handleSubmit = async () => {
+    setIsConsoleOpen(true);
     const payload = {
       language,
       code,
@@ -248,7 +250,7 @@ useEffect(() => {
                   </div>
 
                   <div className="flex flex-col w-full items-center">
-                    <div className="flex justify-between w-full">
+                    <div className="flex justify-between w-full my-2">
                       <div>
                         <p className="text-2xl">Font size</p>
                         <p className="text-slate-400">
@@ -263,7 +265,7 @@ useEffect(() => {
                       </div>
                     </div>
 
-                    <div className="flex justify-between w-full">
+                    <div className="flex justify-between w-full my-2">
                       <div>
                         <p className="text-2xl">Font family</p>
                         <p className="text-slate-400">
@@ -278,7 +280,7 @@ useEffect(() => {
                       </div>
                     </div>
 
-                    <div className="flex justify-between w-full">
+                    <div className="flex justify-between w-full my-2">
                       <div>
                         <p className="text-2xl">Set as default</p>
                         <p className="text-slate-400">
@@ -320,18 +322,48 @@ useEffect(() => {
               {" "}
               <div className="run-code flex justify-between items-center">
                 {" "}
-                <button className="btn consoleButton mx-10">Console</button>
+                <button
+                  className="btn consoleButton mx-10"
+                  onClick={() => setIsConsoleOpen(!isConsoleOpen)}
+                >
+                  Console
+                </button>
                 <button className="btn runButton mx-10" onClick={handleSubmit}>
                   Run Code
                 </button>
+                {isConsoleOpen && (
+                  <div className="fixed bottom-0 left-0 right-0 pop-up text-white p-4 z-50 console-window">
+                    <div className="flex items-center justify-between mb-4 border-b-2 border-slate-200 pb-4 ">
+                      <div className="text-2xl">Console</div>
+                      <button
+                        onClick={() => setIsConsoleOpen(false)}
+                        className="text-3xl"
+                      >
+                        <AiOutlineClose />
+                      </button>
+                    </div>
+                    <div className="overflow-y-auto">
+                      <p>{status}</p>
+                      <p>{renderJobDetails()}</p>
+                      <div className="text-2xl">
+                        {output ? (
+                          <p
+                            className={
+                              status === "Error"
+                                ? "text-red-500"
+                                : "text-green-300"
+                            }
+                          >
+                            {output}
+                          </p>
+                        ) : (
+                          <></>
+                        )}
+                      </div>
+                    </div>
+                  </div>
+                )}
               </div>
-              <p>{status}</p>
-              <p>{renderJobDetails()}</p>
-              {output ? (
-                <p className="text-green-700">Output-{output}</p>
-              ) : (
-                <></>
-              )}
             </div>
           </div>
         </div>

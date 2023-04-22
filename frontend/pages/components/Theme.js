@@ -13,6 +13,22 @@ const Theme = ({theme, setTheme}) => {
       >
         <option value="vs-dark">vs-dark</option>
         <option value="vs-light">vs-light</option>
+        <option value="hc-black">hc-black</option>
+        {/* <option value="hc-white">hc-white</option>
+        <option value="azure">azure</option>
+        <option value="clouds">clouds</option>
+        <option value="chrome-devtools">chrome-devtools</option>
+        <option value="github">github</option>
+        <option value="kuroir">kuroir</option>
+        <option value="eclipse">eclipse</option>
+        <option value="tomorrow-night-blue">tomorrow-night-blue</option>
+        <option value="monokai">monokai</option>
+        <option value="solarized-dark">solarized-dark</option>
+        <option value="textmate">textmate</option>
+        <option value="tomorrow">tomorrow</option>
+        <option value="twilight">twilight</option>
+        <option value="xcode">xcode</option>
+        <option value="solarized-dark">solarized-dark</option> */}
       </select>
     </div>
   );
