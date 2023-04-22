@@ -89,9 +89,9 @@ footer a {
 }
 
 .createNewBtn {
-    color: #4AED88;
+    color: #42d379;
     text-decoration: none;
-    border-bottom: 1px solid #4AED88;
+    border-bottom: 1px solid #42d379;
     transition: all 0.3s ease-in-out;
 }
 
@@ -148,8 +148,12 @@ footer a:hover {
 }
 
 .leaveBtn {
+    background-color: rgb(216, 120, 120);
     width: 100%;
     margin-top: 20px;
+}
+.leaveBtn:hover{
+    background-color: rgb(201, 87, 87);
 }
 
 .copyBtn{
@@ -184,7 +188,7 @@ footer a:hover {
 }
 
 .editorBottombar{
-    min-height: 6vh;
+    min-height: 9vh;
 }
 
 .defaultButton{
@@ -195,6 +199,28 @@ footer a:hover {
 
 .defaultButton:hover{
      background-color: rgb(197, 216, 253);
+}
+
+.consoleButton{
+    background-color: #374151;
+    color: white;
+    width: 112px;
+}
+
+.consoleButton:hover{
+     background-color: #28303d;
+}
+.runButton{
+     background-color: #42d379;
+     text-decoration: none;
+     border-bottom: 1px solid #42d379;
+     transition: all 0.3s ease-in-out;
+    width: 112px;
+}
+
+.runButton:hover{
+      background-color: #368654;
+      border-color: #368654;
 }
 
 .pop-up{

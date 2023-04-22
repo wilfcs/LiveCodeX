@@ -206,7 +206,7 @@ useEffect(() => {
             Copy ROOM ID
           </button>
           <button className="btn leaveBtn" onClick={leaveRoom}>
-            Leave
+            Leave Room
           </button>
         </div>
 
@@ -307,7 +307,7 @@ useEffect(() => {
               value={code}
               onMount={handleEditorDidMount}
               onChange={setEditorValue}
-              height="88vh"
+              height="85vh"
               width="100%"
               theme={theme}
               defaultLanguage="cpp"
@@ -315,15 +315,13 @@ useEffect(() => {
             />
           </div>
 
-          <div className="editorBottombar">
+          <div className="editorBottombar flex flex-col justify-center">
             <div>
               {" "}
-              <div className="run-code">
+              <div className="run-code flex justify-between items-center">
                 {" "}
-                <button
-                  className="border-2 bg-blue-300 p-4 rounded-lg"
-                  onClick={handleSubmit}
-                >
+                <button className="btn consoleButton mx-10">Console</button>
+                <button className="btn runButton mx-10" onClick={handleSubmit}>
                   Run Code
                 </button>
               </div>
