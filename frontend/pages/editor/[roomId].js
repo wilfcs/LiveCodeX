@@ -332,9 +332,9 @@ useEffect(() => {
                   Run Code
                 </button>
                 {isConsoleOpen && (
-                  <div className="fixed bottom-0 left-0 right-0 pop-up text-white p-4 z-50 console-window">
+                  <div className="fixed bottom-0 left-0 right-0 pop-up text-white p-4 z-50 console-window overflow-scroll">
                     <div className="flex items-center justify-between mb-4 border-b-2 border-slate-200 pb-4 ">
-                      <div className="text-2xl">Console</div>
+                      <div className="text-2xl text-slate-200">Console</div>
                       <button
                         onClick={() => setIsConsoleOpen(false)}
                         className="text-3xl"
@@ -343,15 +343,33 @@ useEffect(() => {
                       </button>
                     </div>
                     <div className="overflow-y-auto">
-                      <p>{status}</p>
-                      <p>{renderJobDetails()}</p>
-                      <div className="text-2xl">
+                      {status === "Pending" ? (
+                        <div class="loader-wrapper">
+                          <div class="loader"></div>
+                          Pending...
+                        </div>
+                      ) : (
+                        <div className="text-4xl">
+                          <p
+                            className={
+                              status === "Error"
+                                ? "text-red-600"
+                                : "text-green-600"
+                            }
+                          >
+                            {status}
+                          </p>
+                        </div>
+                      )}
+
+                      <p className="text-slate-300">{renderJobDetails()}</p>
+                      <div className="text-xl">
                         {output ? (
                           <p
                             className={
                               status === "Error"
-                                ? "text-red-500"
-                                : "text-green-300"
+                                ? "text-red-200"
+                                : "text-green-200"
                             }
                           >
                             {output}
