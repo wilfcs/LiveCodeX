@@ -8,7 +8,14 @@ import moment from "moment";
 import Client from "../components/Client";
 import Logo2 from "../components/Logo2";
 import {IoMdCheckmarkCircle} from "react-icons/io"
+import { BiReset } from "react-icons/bi";
+import { AiFillSetting } from "react-icons/ai";
+import { AiOutlineClose } from "react-icons/ai";
 import Editor from "@monaco-editor/react"
+import Theme from "../components/Theme";
+import Language from "../components/Language";
+import Font from "../components/Font";
+import Size from "../components/Size";
 
 
 const roomId = () => {
@@ -28,6 +35,7 @@ const roomId = () => {
   const [theme, setTheme] = useState("vs-dark")
   const [sizeOfFont, setSizeOfFont] = useState(20);
   const [familyOfFont, setFamilyOfFont] = useState("default");
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     setCode(stubs[language]);
@@ -35,7 +43,13 @@ const roomId = () => {
 
   useEffect(() => {
     const defaultLang = localStorage.getItem("default-language") || "cpp";
+    const defaultTheme = localStorage.getItem("default-theme") || "vs-dark";
+    const defaultSize = localStorage.getItem("default-size") || 20;
+    const defaultFont = localStorage.getItem("default-font") || "default";
     setLanguage(defaultLang);
+    setTheme(defaultTheme);
+    setSizeOfFont(defaultSize);
+    setFamilyOfFont(defaultFont);
   }, []);
 
 useEffect(() => {
@@ -46,12 +60,13 @@ useEffect(() => {
 
   const setDefaultLanguage = () => {
     let response = window.confirm(
-      `This will set ${
-        language === "py" ? "python" : "c++"
-      } as your default language. Would you like to continue?`
+      `This will set all your current settings as your default settings. Would you like to continue?`
     );
     if (response) {
       localStorage.setItem("default-language", language);
+      localStorage.setItem("default-theme", theme);
+      localStorage.setItem("default-size", sizeOfFont);
+      localStorage.setItem("default-font", familyOfFont);
     }
   };
 
@@ -173,60 +188,9 @@ useEffect(() => {
         <Head>
           <title>LiveCodeX</title>
         </Head>
-        {/* <div>
-          <label>Language:</label>
-          <select
-            value={language}
-            onChange={(e) => {
-              let response = window.confirm(
-                "WARNING: Switching the language will remove your current code. Do you want to proceed?"
-              );
-              if (response) setLanguage(e.target.value);
-            }}
-          >
-            <option value="cpp">C++</option>
-            <option value="py">Python</option>
-          </select>
-        </div> */}
-        {/* <div>
-          <button onClick={setDefaultLanguage}>Set Default</button>
-        </div> */}
-        {/* <div>
-          <button onClick={resetCode}>Reset logo</button>
-        </div> */}
-        {/* <div>
-          <a
-            href="https://portfolio-website-xi-two.vercel.app/"
-            target="_blank"
-          >
-            i
-          </a>
-        </div> */}
-        {/* <textarea
-          name="codeBox"
-          value={code}
-          onChange={(e) => setCode(e.target.value)}
-          cols="60"
-          rows="10"
-          className="border-4"
-        ></textarea> */}
-        {/* <div>
-          {" "}
-          <button
-            className="border-2 bg-blue-300 p-4 rounded-lg"
-            onClick={handleSubmit}
-          >
-            Run Code
-          </button>
-          <p>{status}</p>
-          <p>{renderJobDetails()}</p>
-          {output ? <p className="text-green-700">Output-{output}</p> : <></>}
-        </div> */}
-
         <div className="aside">
           <div className="asideInner">
             <div className="logo">
-              {/* <Logo className="logoImage" /> */}
               <Logo2 />
             </div>
             <h3 className="logoColor2 flex items-center flex-wrap text-sm mt-6 mb-2">
@@ -247,78 +211,94 @@ useEffect(() => {
         </div>
 
         <div className="editorWrap">
-          <div className="editorTopbar">
-            <div className="language-change">
-              <label className="mx-1">Language: </label>
-              <select
-                value={language}
-                onChange={(e) => {
-                  let response = window.confirm(
-                    "WARNING: Switching the language will remove your current code. Do you want to proceed?"
-                  );
-                  if (response) setLanguage(e.target.value);
-                }}
-              >
-                <option value="cpp">C++</option>
-                <option value="py">Python</option>
-              </select>
-            </div>
-            <div className="theme-change">
-              <label className="mx-1">Theme: </label>
-              <select
-                value={theme}
-                onChange={(e) => {
-                  setTheme(e.target.value);
-                }}
-              >
-                <option value="vs-dark">vs-dark</option>
-                <option value="vs-light">vs-light</option>
-              </select>
-            </div>
-            <div className="font-family">
-              <label className="mx-1">Font-Family: </label>
-              <select
-                value={familyOfFont}
-                onChange={(e) => {
-                  setFamilyOfFont(e.target.value);
-                }}
-              >
-                <option value="default">Default</option>
-                <option value="Courier New">Courier New</option>
-              </select>
-            </div>
-            <div className="font-size">
-              <label className="mx-1">Font-Size: </label>
-              <select
-                value={sizeOfFont}
-                onChange={(e) => {
-                  setSizeOfFont(e.target.value);
-                }}
-              >
-                <option value="15">10px</option>
-                <option value="16">11px</option>
-                <option value="17">12px</option>
-                <option value="18">13px</option>
-                <option value="19">14px</option>
-                <option value="20">15px</option>
-                <option value="21">16px</option>
-                <option value="22">17px</option>
-                <option value="23">18px</option>
-                <option value="24">19px</option>
-                <option value="25">20px</option>
-                <option value="26">21px</option>
-                <option value="27">22px</option>
-                <option value="28">23px</option>
-                <option value="29">24px</option>
-                <option value="30">25px</option>
-              </select>
-            </div>
+          <div className="editorTopbar flex items-center justify-between mx-20 flex-wrap">
             <div>
-              <button onClick={setDefaultLanguage}>Set Default</button>
+              <Language language={language} setLanguage={setLanguage} />
             </div>
-            <div>
-              <button onClick={resetCode}>Reset logo</button>
+
+            <div className="flex">
+              <Theme theme={theme} setTheme={setTheme} />
+              <button
+                onClick={resetCode}
+                className="text-white text-2xl hover:animate-pulse mx-2"
+              >
+                <BiReset />
+              </button>
+              <button
+                onClick={() => setIsOpen(!isOpen)}
+                className="text-white text-2xl hover:animate-pulse"
+              >
+                <AiFillSetting />
+              </button>
             </div>
+
+            {isOpen && (
+              <div className="fixed inset-0 bg-slate-700 bg-opacity-75 z-50 flex justify-center items-center text-white">
+                <div className="p-4 pop-up rounded-lg shadow-lg">
+                  <div className="flex justify-between items-center w-full mb-8 border-b-2 border-slate-700">
+                    <div className="text-4xl">Settings</div>
+                    <div>
+                      <button
+                        className="text-3xl"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        <AiOutlineClose />
+                      </button>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-col w-full items-center">
+                    <div className="flex justify-between w-full">
+                      <div>
+                        <p className="text-2xl">Font size</p>
+                        <p className="text-slate-400">
+                          Choose your preferred font size for the code editor.
+                        </p>
+                      </div>
+                      <div>
+                        <Size
+                          sizeOfFont={sizeOfFont}
+                          setSizeOfFont={setSizeOfFont}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex justify-between w-full">
+                      <div>
+                        <p className="text-2xl">Font family</p>
+                        <p className="text-slate-400">
+                          Choose your preferred font family for the code editor.
+                        </p>
+                      </div>
+                      <div>
+                        <Font
+                          familyOfFont={familyOfFont}
+                          setFamilyOfFont={setFamilyOfFont}
+                        />
+                      </div>
+                    </div>
+
+                    <div className="flex justify-between w-full">
+                      <div>
+                        <p className="text-2xl">Set as default</p>
+                        <p className="text-slate-400">
+                          Click to set all the current settings as your default
+                          settings.
+                        </p>
+                      </div>
+                      <div>
+                        <button
+                          onClick={setDefaultLanguage}
+                          className="btn defaultButton m-2"
+                        >
+                          Set Default
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
           <div className="editorContent">
@@ -334,19 +314,27 @@ useEffect(() => {
               options={{ fontSize: sizeOfFont, fontFamily: familyOfFont }}
             />
           </div>
+
           <div className="editorBottombar">
             <div>
-          {" "}
-          <button
-            className="border-2 bg-blue-300 p-4 rounded-lg"
-            onClick={handleSubmit}
-          >
-            Run Code
-          </button>
-          <p>{status}</p>
-          <p>{renderJobDetails()}</p>
-          {output ? <p className="text-green-700">Output-{output}</p> : <></>}
-        </div>
+              {" "}
+              <div className="run-code">
+                {" "}
+                <button
+                  className="border-2 bg-blue-300 p-4 rounded-lg"
+                  onClick={handleSubmit}
+                >
+                  Run Code
+                </button>
+              </div>
+              <p>{status}</p>
+              <p>{renderJobDetails()}</p>
+              {output ? (
+                <p className="text-green-700">Output-{output}</p>
+              ) : (
+                <></>
+              )}
+            </div>
           </div>
         </div>
       </div>
