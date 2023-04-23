@@ -66,12 +66,17 @@ io.on("connection", (socket) => {
     const codeSent = code;
     const idSent = idOfRoom;
     const userSent = username;
-    console.log("userkaname", username)
     // io.to(idOfRoom).emit(ACTIONS.CODE_CHANGE, {codeSent});
     // io.in(idOfRoom).emit(ACTIONS.CODE_CHANGE, { codeSent });
     // socket.in(idOfRoom).emit(ACTIONS.CODE_CHANGE, {codeSent});
     socket.in(idOfRoom).emit(ACTIONS.CODE_CHANGE, { codeSent, idSent, userSent});
-    // socket.broadcast.to(idOfRoom).emit(ACTIONS.CODE_CHANGE, { codeSent });
+
+  })
+  socket.on(ACTIONS.SYNC_CODE, ({  code, socketId }) =>{
+    const codeSent = code;
+
+    io.to(socketId).emit(ACTIONS.CODE_CHANGE, { codeSent });
+
   })
 
 

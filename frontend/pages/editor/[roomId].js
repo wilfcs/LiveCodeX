@@ -18,12 +18,13 @@ import Font from "../components/Font";
 import Size from "../components/Size";
 import { initSocket } from "../components/socket";
 import ACTIONS from "../components/Actions";
-import toast from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
 
 const roomId = () => {
   const router = useRouter();
   const idOfRoom = router.query.roomId;
   const editorRef = useRef(null);
+  const codeRef = useRef(null);
   const [isChanging, setIsChanging] = useState(false);
 
   // This section is for the logic of the execution of the files.
@@ -86,6 +87,7 @@ const roomId = () => {
 
   const setEditorValue = () => {
     setCode(editorRef.current.getValue());
+    codeRef.current = code;
 
     socketRef.current.emit(ACTIONS.CODE_CHANGE, {
       idOfRoom,
@@ -225,18 +227,18 @@ const roomId = () => {
       socketRef.current.on(
         ACTIONS.JOINED,
         ({ clients, userkaname, socketId }) => {
-          if (userkaname !== username) {
+          if (userkaname !== router.query.name) {
             toast.success(`${userkaname} joined the room.`);
             console.log(`${userkaname} joined`);
           }
-          console.log("this is client", clients);
           setClientsList([]);
 
           const newArray = clients.filter((item, index) => {
             if (!(index % 2)) return item;
           });
           setClientsList(newArray);
-          console.log("After filter:- ", newArray);
+          console.log("code->", code, "socketId", socketId);
+          socketRef.current.emit(ACTIONS.SYNC_CODE, {code: codeRef.current , socketId})
 
           //  socketRef.current.emit(ACTIONS.SYNC_CODE, {
           //    code: codeRef.current,
@@ -253,13 +255,24 @@ const roomId = () => {
         });
       });
 
-      // Trying to receive code and other stuff
+      if(socketRef.current){
+        // Trying to receive code and other stuff
 
-      socketRef.current.on(ACTIONS.CODE_CHANGE, ({codeSent, idSent, userSent})=>{
-        console.log("code sent ->>>>>>", codeSent);
-        if(codeSent!=null && userSent!=router.query.name)
-          setCode(codeSent);
-      })
+        socketRef.current.on(
+          ACTIONS.CODE_CHANGE,
+          ({ codeSent, idSent, userSent }) => {
+            console.log("code sent ->>>>>>", codeSent);
+            if (codeSent != null && userSent != router.query.name)
+              setCode(codeSent);
+          }
+        );
+
+        // on leave
+        return () => {
+          socketRef.current.off(ACTIONS.CODE_CHANGE);
+        };
+      }
+     
 
       // socketRef.current.on(
       //   ACTIONS.CODE_CHANGE,
@@ -280,12 +293,32 @@ const roomId = () => {
     // };
   }, []);
 
-  const copyRoomId = () => {};
+  const copyRoomId = async () => {
+     try {
+            await navigator.clipboard.writeText(idOfRoom);
+            toast.success('Room ID has been copied to your clipboard');
+        } catch (err) {
+            toast.error('Could not copy the Room ID');
+            console.error(err);
+        }
+  };
 
-  const leaveRoom = () => {};
+  const leaveRoom = () => {
+    router.push("/");
+    // socketRef.current.off(ACTIONS.CODE_CHANGE);
+  };
 
   return (
     <>
+      <Toaster
+        toastOptions={{
+          success: {
+            theme: {
+              primary: "",
+            },
+          },
+        }}
+      ></Toaster>
       <div className="mainWrap">
         <Head>
           <title>LiveCodeX</title>
@@ -300,8 +333,8 @@ const roomId = () => {
             </h3>
             <div className="clientsList">
               {clientsList.map((client) => (
-                 <Client key={client.socketId} userName={client.userkaname} />
-))}
+                <Client key={client.socketId} userName={client.userkaname} />
+              ))}
             </div>
           </div>
           <button className="btn copyBtn" onClick={copyRoomId}>
