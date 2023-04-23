@@ -7,16 +7,18 @@ import stubs from "../components/defaultStubs";
 import moment from "moment";
 import Client from "../components/Client";
 import Logo2 from "../components/Logo2";
-import {IoMdCheckmarkCircle} from "react-icons/io"
+import { IoMdCheckmarkCircle } from "react-icons/io";
 import { BiReset } from "react-icons/bi";
 import { AiFillSetting } from "react-icons/ai";
 import { AiOutlineClose } from "react-icons/ai";
-import Editor from "@monaco-editor/react"
+import Editor from "@monaco-editor/react";
 import Theme from "../components/Theme";
 import Language from "../components/Language";
 import Font from "../components/Font";
 import Size from "../components/Size";
-
+import { initSocket } from "../components/socket";
+import ACTIONS from "../components/Actions";
+import toast from "react-hot-toast";
 
 const roomId = () => {
   const router = useRouter();
@@ -31,12 +33,13 @@ const roomId = () => {
   const [jobId, setJobId] = useState("");
   const [status, setStatus] = useState("");
   const [jobDetails, setJobDetails] = useState(null);
-  const [username, setUsername] = useState("")
-  const [theme, setTheme] = useState("vs-dark")
+  const [username, setUsername] = useState("");
+  const [theme, setTheme] = useState("vs-dark");
   const [sizeOfFont, setSizeOfFont] = useState(20);
   const [familyOfFont, setFamilyOfFont] = useState("Consolas");
   const [isOpen, setIsOpen] = useState(false);
-  const [isConsoleOpen, setIsConsoleOpen] = useState(false)
+  const [isConsoleOpen, setIsConsoleOpen] = useState(false);
+  const [flagClient, setFlagClient] = useState(1);
 
   useEffect(() => {
     setCode(stubs[language]);
@@ -53,11 +56,9 @@ const roomId = () => {
     setFamilyOfFont(defaultFont);
   }, []);
 
-useEffect(() => {
-  setUsername(router.query.name);
-}, [router.query]);
-
-
+  useEffect(() => {
+    setUsername(router.query.name);
+  }, [router.query]);
 
   const setDefaultLanguage = () => {
     let response = window.confirm(
@@ -78,12 +79,12 @@ useEffect(() => {
     if (response) setCode(stubs[language]);
   };
 
-  const handleEditorDidMount = (editor, monaco) =>{
+  const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
-  }
-  const setEditorValue = ()=>{
+  };
+  const setEditorValue = () => {
     setCode(editorRef.current.getValue());
-    }
+  };
 
   const renderJobDetails = () => {
     if (!jobDetails) return "";
@@ -169,20 +170,57 @@ useEffect(() => {
 
   // This section is the logic for live editor sync
 
-  const [clients , setClients] = useState([
-    {socketId: 1, userName: 'Himanshu'},
-    {socketId: 2, userName: 'Aditi'}
-  ])
+  const [clients, setClients] = useState([]);
 
-  const copyRoomId = ()=>{
+  const socketRef = useRef(null);
 
-  }
+  useEffect(() => {
+    const init = async () => {
+      // console.log(idOfRoom, " hogyha ", router.query.name, "uye hai frontend");
+      const nameToSend = router.query.name;
+      socketRef.current = await initSocket();
+      socketRef.current.on("connect_error", (err) => handleErrors(err));
+      socketRef.current.on("connect_failed", (err) => handleErrors(err));
 
-  const leaveRoom = ()=>{
+      function handleErrors(e) {
+        console.log("socket error", e);
+        toast.error("Socket connection failed, try again later.");
+        router.push("/");
+      }
+      console.log(
+        idOfRoom,
+        "ye wala bhi chale hai",
+        nameToSend,
+        "uye hai frontend"
+      );
+      socketRef.current = await initSocket();
+      socketRef.current.emit(ACTIONS.JOIN, {
+        idOfRoom,
+        nameToSend,
+      });
 
-  }
+      socketRef.current.on(
+        ACTIONS.JOINED,
+        ({ clients, userkaname, socketId }) => {
+          if (userkaname !== username) {
+            toast.success(`${userkaname} joined the room.`);
+            console.log(`${userkaname} joined`);
+          }
+          console.log("this is client", clients[0]);
+          setClients(clients);
+          //  socketRef.current.emit(ACTIONS.SYNC_CODE, {
+          //    code: codeRef.current,
+          //    socketId,
+          //  });
+        }
+      );
+    };
+    init();
+  }, []);
 
+  const copyRoomId = () => {};
 
+  const leaveRoom = () => {};
 
   return (
     <>
@@ -199,9 +237,11 @@ useEffect(() => {
               Connection Successful <IoMdCheckmarkCircle className="m-2" />
             </h3>
             <div className="clientsList">
-              {clients.map((client) => (
-                <Client key={client.socketId} userName={client.userName} />
-              ))}
+              {clients.map((client, index) => {
+                return index % 2 ? (
+                  <Client key={client.socketId} userName={client.userkaname} />
+                ) : null;
+              })}
             </div>
           </div>
           <button className="btn copyBtn" onClick={copyRoomId}>
