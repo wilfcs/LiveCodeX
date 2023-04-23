@@ -170,7 +170,7 @@ const roomId = () => {
 
   // This section is the logic for live editor sync
 
-  const [clients, setClients] = useState([]);
+  const [clientsList, setClientsList] = useState([]);
 
   const socketRef = useRef(null);
 
@@ -206,16 +206,37 @@ const roomId = () => {
             toast.success(`${userkaname} joined the room.`);
             console.log(`${userkaname} joined`);
           }
-          console.log("this is client", clients[0]);
-          setClients(clients);
+          console.log("this is client", clients);
+          setClientsList([]);
+
+          const newArray = clients.filter((item, index) => {
+            if (index % 2) return item;
+          });
+          setClientsList(newArray);
+          console.log("After filter:- ", newArray);
+
           //  socketRef.current.emit(ACTIONS.SYNC_CODE, {
           //    code: codeRef.current,
           //    socketId,
           //  });
         }
       );
+
+      // Listening for disconnected
+      socketRef.current.on(ACTIONS.DISCONNECTED, ({ socketId, userkaname }) => {
+        toast.success(`${userkaname} left the room.`);
+        setClientsList((prev) => {
+          return prev.filter((client) => client.socketId !== socketId);
+        });
+      });
     };
     init();
+    // This piece of code is throwing error
+    // return () => {
+    //   socketRef.current.disconnect();
+    //   socketRef.current.off(ACTIONS.JOINED);
+    //   socketRef.current.off(ACTIONS.DISCONNECTED);
+    // };
   }, []);
 
   const copyRoomId = () => {};
@@ -237,11 +258,9 @@ const roomId = () => {
               Connection Successful <IoMdCheckmarkCircle className="m-2" />
             </h3>
             <div className="clientsList">
-              {clients.map((client, index) => {
-                return index % 2 ? (
-                  <Client key={client.socketId} userName={client.userkaname} />
-                ) : null;
-              })}
+              {clientsList.map((client) => (
+                 <Client key={client.socketId} userName={client.userkaname} />
+))}
             </div>
           </div>
           <button className="btn copyBtn" onClick={copyRoomId}>
