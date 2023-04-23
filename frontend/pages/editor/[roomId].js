@@ -24,6 +24,7 @@ const roomId = () => {
   const router = useRouter();
   const idOfRoom = router.query.roomId;
   const editorRef = useRef(null);
+  const [isChanging, setIsChanging] = useState(false);
 
   // This section is for the logic of the execution of the files.
 
@@ -82,8 +83,29 @@ const roomId = () => {
   const handleEditorDidMount = (editor, monaco) => {
     editorRef.current = editor;
   };
+
   const setEditorValue = () => {
     setCode(editorRef.current.getValue());
+
+    socketRef.current.emit(ACTIONS.CODE_CHANGE, {
+      idOfRoom,
+      code: editorRef.current.getValue(),
+      username,
+    });
+
+    // socketRef.current.on(ACTIONS.CODE_CHANGE, ({codeSent})=>{
+    //   if(codeSent!=null)
+    //     setCode(codeSent);
+    // })
+    //  socketRef.current.on(
+    //    ACTIONS.CODE_CHANGE,
+    //    ({ codeSent, roomIdThatSent }) => {
+    //      console.log("roomIdThatSent", roomIdThatSent, "idofroom", idOfRoom);
+    //      if (codeSent != null) {
+    //        if (roomIdThatSent != idOfRoom) setCode(codeSent);
+    //      }
+    //    }
+    //  );
   };
 
   const renderJobDetails = () => {
@@ -173,6 +195,7 @@ const roomId = () => {
   const [clientsList, setClientsList] = useState([]);
 
   const socketRef = useRef(null);
+  
 
   useEffect(() => {
     const init = async () => {
@@ -210,7 +233,7 @@ const roomId = () => {
           setClientsList([]);
 
           const newArray = clients.filter((item, index) => {
-            if (index % 2) return item;
+            if (!(index % 2)) return item;
           });
           setClientsList(newArray);
           console.log("After filter:- ", newArray);
@@ -229,6 +252,24 @@ const roomId = () => {
           return prev.filter((client) => client.socketId !== socketId);
         });
       });
+
+      // Trying to receive code and other stuff
+
+      socketRef.current.on(ACTIONS.CODE_CHANGE, ({codeSent, idSent, userSent})=>{
+        console.log("code sent ->>>>>>", codeSent);
+        if(codeSent!=null && userSent!=router.query.name)
+          setCode(codeSent);
+      })
+
+      // socketRef.current.on(
+      //   ACTIONS.CODE_CHANGE,
+      //   ({ codeSent, roomIdThatSent }) => {
+      //     console.log("roomIdThatSent", roomIdThatSent, "idofroom", idOfRoom);
+      //     if (codeSent != null) {
+      //       if (roomIdThatSent != idOfRoom) setCode(codeSent);
+      //     }
+      //   }
+      // );
     };
     init();
     // This piece of code is throwing error

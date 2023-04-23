@@ -62,6 +62,19 @@ io.on("connection", (socket) => {
 
   });
 
+  socket.on(ACTIONS.CODE_CHANGE, ({ idOfRoom, code, username }) =>{
+    const codeSent = code;
+    const idSent = idOfRoom;
+    const userSent = username;
+    console.log("userkaname", username)
+    // io.to(idOfRoom).emit(ACTIONS.CODE_CHANGE, {codeSent});
+    // io.in(idOfRoom).emit(ACTIONS.CODE_CHANGE, { codeSent });
+    // socket.in(idOfRoom).emit(ACTIONS.CODE_CHANGE, {codeSent});
+    socket.in(idOfRoom).emit(ACTIONS.CODE_CHANGE, { codeSent, idSent, userSent});
+    // socket.broadcast.to(idOfRoom).emit(ACTIONS.CODE_CHANGE, { codeSent });
+  })
+
+
   socket.on("disconnecting", () => {
     const rooms = [...socket.rooms];
     rooms.forEach((roomId) => {
