@@ -141,7 +141,10 @@ const roomId = () => {
       setOutput("");
       setJobDetails(null);
 
-      const { data } = await axios.post("http://localhost:5000/run", payload);
+      const { data } = await axios.post(
+        "https://livecodex-backend.onrender.com/run",
+        payload
+      );
       console.log(data);
       setJobId(data.jobId);
 
@@ -149,7 +152,7 @@ const roomId = () => {
 
       intervalId = setInterval(async () => {
         const { data: dataRes } = await axios.get(
-          "http://localhost:5000/status",
+          "https://livecodex-backend.onrender.com/status",
           { params: { id: data.jobId } }
         );
         console.log(dataRes);
