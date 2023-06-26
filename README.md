@@ -49,7 +49,7 @@ Once the LiveCodeX IDE is running, follow these steps to utilize its features:
 
 ## Contact
 
-For any inquiries or further information, please contact our team at [mishrahimanshu070@gmail.com](mailto:mishrahimanshu070@gmail.com).
+For any inquiries or further information, please contact me at [mishrahimanshu070@gmail.com](mailto:mishrahimanshu070@gmail.com).
 
 Enjoy using LiveCodeX IDE with its collaborative coding and customization features!
 
