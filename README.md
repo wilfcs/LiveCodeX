@@ -3,7 +3,8 @@
 #### LiveCodeX, an innovative real-time coding web application with an inbuilt code editor and real-time sync capabilities, enabling users to collaborate and evaluate their coding skills effectively.
 
 ## Screenshots: 
-![Create room feature](https://drive.google.com/drive/u/1/folders/17JVSHz4L9maI6i-247XcheVZQxK-dE4A)
+#### Create Room Feature
+https://github.com/himanshu070/LiveCodeX/assets/66140981/df9c01f5-f375-4442-a9af-784c8ab2bf89
 ![Create room feature](./frontend/public/ss1.png)
 ![Join room with a room id and name](./frontend/public/ss2.png)
 ![User joined](./frontend/public/ss3.png)
