@@ -4,7 +4,6 @@
 
 ## Screenshots: 
 #### Create Room Feature
-https://github.com/himanshu070/LiveCodeX/assets/66140981/df9c01f5-f375-4442-a9af-784c8ab2bf89
 ![Create room feature](https://github.com/himanshu070/LiveCodeX/assets/66140981/df9c01f5-f375-4442-a9af-784c8ab2bf89)
 ![Create room feature](./frontend/public/ss1.png)
 ![Join room with a room id and name](./frontend/public/ss2.png)
