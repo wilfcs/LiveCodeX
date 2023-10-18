@@ -18,6 +18,8 @@
 ![Theme hc-black](https://github.com/himanshu070/LiveCodeX/assets/66140981/fe468992-ae87-4940-b471-7ccbf875eda5)
 #### More settings
 ![More settings](https://github.com/himanshu070/LiveCodeX/assets/66140981/58b21f49-9f41-4683-98c2-420765d0c061)
+#### 404 Page. Yes takes you to the home page. No rickrolls you.
+![404 Page](https://github.com/himanshu070/LiveCodeX/assets/66140981/8bc5d0c4-6ee7-4167-9343-daec9377cdc1)
 
 
 ## More info about LiveCodeX:
