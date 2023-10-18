@@ -10,7 +10,7 @@
 ![Join room with a room id and name](https://github.com/himanshu070/LiveCodeX/assets/66140981/83ac7268-523e-4e5b-acc0-42a52f02240c)
 #### User joined
 ![User joined](https://github.com/himanshu070/LiveCodeX/assets/66140981/df69cfe1-cec6-4207-ae97-9b40a18a2b25)
-#### Another user joined using the same room id and code execution
+#### CODE EXECUTION and another user joined the same room
 ![Another user joined using the same room id and code execution](https://github.com/himanshu070/LiveCodeX/assets/66140981/04c132b5-a92e-48dd-adc1-8573a4290842)
 #### Theme vs-lite
 ![Theme vs-lite](https://github.com/himanshu070/LiveCodeX/assets/66140981/bf0272a1-1da8-4fdb-8cdc-651f964d7506)
