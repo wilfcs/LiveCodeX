@@ -1,17 +1,18 @@
 # LiveCodeX
+![](https://github.com/himanshu070/LiveCodeX/assets/66140981/fcdbd837-23ab-412b-843e-df67d72f8571)
 
 #### LiveCodeX, an innovative real-time coding web application with an inbuilt code editor and real-time sync capabilities, enabling users to collaborate and evaluate their coding skills effectively.
 
 ## Screenshots: 
 #### Create Room Feature
 ![Create room feature](https://github.com/himanshu070/LiveCodeX/assets/66140981/df9c01f5-f375-4442-a9af-784c8ab2bf89)
-![Create room feature](./frontend/public/ss1.png)
-![Join room with a room id and name](./frontend/public/ss2.png)
-![User joined](./frontend/public/ss3.png)
-![Another user joined using the same room id and code execution](./frontend/public/ss4.png)
-![Theme vs-lite](./frontend/public/ss5.png)
-![Theme hc-black](./frontend/public/ss6.png)
-![More settings](./frontend/public/ss7.png)
+![Join room with a room id and name](https://github.com/himanshu070/LiveCodeX/assets/66140981/83ac7268-523e-4e5b-acc0-42a52f02240c)
+![User joined](https://github.com/himanshu070/LiveCodeX/assets/66140981/df69cfe1-cec6-4207-ae97-9b40a18a2b25)
+![Another user joined using the same room id and code execution](https://github.com/himanshu070/LiveCodeX/assets/66140981/04c132b5-a92e-48dd-adc1-8573a4290842)
+![Theme vs-lite](https://github.com/himanshu070/LiveCodeX/assets/66140981/bf0272a1-1da8-4fdb-8cdc-651f964d7506)
+![Theme hc-black](https://github.com/himanshu070/LiveCodeX/assets/66140981/fe468992-ae87-4940-b471-7ccbf875eda5)
+![More settings](https://github.com/himanshu070/LiveCodeX/assets/66140981/58b21f49-9f41-4683-98c2-420765d0c061)
+
 
 ## More info about LiveCodeX:
 Welcome LiveCodeX IDE! This application is built using Next.js and incorporates a code compiler feature using child processes. The IDE provides a collaborative coding environment where users can join a room and write code together. Additionally, it offers various themes and fonts to enhance the coding experience.
