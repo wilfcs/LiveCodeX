@@ -1,16 +1,22 @@
 # LiveCodeX
-![](https://github.com/himanshu070/LiveCodeX/assets/66140981/fcdbd837-23ab-412b-843e-df67d72f8571)
+![LiveCodeX](https://github.com/himanshu070/LiveCodeX/assets/66140981/fcdbd837-23ab-412b-843e-df67d72f8571)
 
 #### LiveCodeX, an innovative real-time coding web application with an inbuilt code editor and real-time sync capabilities, enabling users to collaborate and evaluate their coding skills effectively.
 
 ## Screenshots: 
 #### Create Room Feature
 ![Create room feature](https://github.com/himanshu070/LiveCodeX/assets/66140981/df9c01f5-f375-4442-a9af-784c8ab2bf89)
+#### Join room with a room id and name
 ![Join room with a room id and name](https://github.com/himanshu070/LiveCodeX/assets/66140981/83ac7268-523e-4e5b-acc0-42a52f02240c)
+#### User joined
 ![User joined](https://github.com/himanshu070/LiveCodeX/assets/66140981/df69cfe1-cec6-4207-ae97-9b40a18a2b25)
+#### Another user joined using the same room id and code execution
 ![Another user joined using the same room id and code execution](https://github.com/himanshu070/LiveCodeX/assets/66140981/04c132b5-a92e-48dd-adc1-8573a4290842)
+#### Theme vs-lite
 ![Theme vs-lite](https://github.com/himanshu070/LiveCodeX/assets/66140981/bf0272a1-1da8-4fdb-8cdc-651f964d7506)
+#### Theme hc-black
 ![Theme hc-black](https://github.com/himanshu070/LiveCodeX/assets/66140981/fe468992-ae87-4940-b471-7ccbf875eda5)
+#### More settings
 ![More settings](https://github.com/himanshu070/LiveCodeX/assets/66140981/58b21f49-9f41-4683-98c2-420765d0c061)
 
 
